@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2023.2.13)  15 FEB 2023 09:25
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2023.2.13)  20 FEB 2023 21:08
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -359,7 +359,7 @@ File: l3backend-pdftex.def 2022-01-12 L3 backend support: PDF output (pdfTeX)
 \l__color_backend_stack_int=\count266
 \l__pdf_internal_box=\box50
 )
-(./Main.aux (./res/title.aux) (./FirstTask/pract1.aux))
+(./Main.aux (./res/title.aux) (./SecondTask/pract2.aux))
 \openout1 = `Main.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 11.
@@ -462,30 +462,154 @@ oc<<t1.cmap>>)
 
 
 ]
-\openout2 = `./FirstTask/pract1.aux'.
+\openout2 = `./SecondTask/pract2.aux'.
 
- (./FirstTask/pract1.tex [3
+ (./SecondTask/pract2.tex [3
 
-] [4] [5]) [6] (./Main.aux (./res/title.aux)
-(./FirstTask/pract1.aux)) ) 
+]
+LaTeX Font Info:    Trying to load font information for T2A+cmtt on input line 
+20.
+
+(/usr/share/texlive/texmf-dist/tex/latex/cyrillic/t2acmtt.fd
+File: t2acmtt.fd 2001/08/11 v1.0a Computer Modern Cyrillic font definitions
+)
+<~/Documents/MobAppDev/SecondTask/PNG/Screenshot from 2023-02-20 18-03-12.png, 
+id=26, 481.8pt x 271.0125pt>
+File: ~/Documents/MobAppDev/SecondTask/PNG/Screenshot from 2023-02-20 18-03-12.
+png Graphic file (type png)
+<use ~/Documents/MobAppDev/SecondTask/PNG/Screenshot from 2023-02-20 18-03-12.p
+ng>
+Package pdftex.def Info: ~/Documents/MobAppDev/SecondTask/PNG/Screenshot from 2
+023-02-20 18-03-12.png  used on input line 38.
+(pdftex.def)             Requested size: 375.57782pt x 211.26897pt.
+<~/Documents/MobAppDev/SecondTask/PNG/Screenshot from 2023-02-20 18-13-18.png, 
+id=27, 481.8pt x 217.81375pt>
+File: ~/Documents/MobAppDev/SecondTask/PNG/Screenshot from 2023-02-20 18-13-18.
+png Graphic file (type png)
+<use ~/Documents/MobAppDev/SecondTask/PNG/Screenshot from 2023-02-20 18-13-18.p
+ng>
+Package pdftex.def Info: ~/Documents/MobAppDev/SecondTask/PNG/Screenshot from 2
+023-02-20 18-13-18.png  used on input line 53.
+(pdftex.def)             Requested size: 328.6279pt x 148.57002pt.
+ [4]
+<~/Documents/MobAppDev/SecondTask/PNG/Screenshot from 2023-02-20 18-13-33.png, 
+id=32, 522.95375pt x 217.81375pt>
+File: ~/Documents/MobAppDev/SecondTask/PNG/Screenshot from 2023-02-20 18-13-33.
+png Graphic file (type png)
+<use ~/Documents/MobAppDev/SecondTask/PNG/Screenshot from 2023-02-20 18-13-33.p
+ng>
+Package pdftex.def Info: ~/Documents/MobAppDev/SecondTask/PNG/Screenshot from 2
+023-02-20 18-13-33.png  used on input line 61.
+(pdftex.def)             Requested size: 328.6279pt x 136.87772pt.
+ [5 </home/arbon/Documents/MobAppDev/SecondTask/PNG/Screenshot from 2023-02-20 
+18-03-12.png> </home/arbon/Documents/MobAppDev/SecondTask/PNG/Screenshot from 2
+023-02-20 18-13-18.png> </home/arbon/Documents/MobAppDev/SecondTask/PNG/Screens
+hot from 2023-02-20 18-13-33.png>]
+<~/Documents/MobAppDev/SecondTask/PNG/Screenshot from 2023-02-20 18-33-17.png, 
+id=40, 426.59375pt x 137.51375pt>
+File: ~/Documents/MobAppDev/SecondTask/PNG/Screenshot from 2023-02-20 18-33-17.
+png Graphic file (type png)
+<use ~/Documents/MobAppDev/SecondTask/PNG/Screenshot from 2023-02-20 18-33-17.p
+ng>
+Package pdftex.def Info: ~/Documents/MobAppDev/SecondTask/PNG/Screenshot from 2
+023-02-20 18-33-17.png  used on input line 77.
+(pdftex.def)             Requested size: 375.57782pt x 121.07541pt.
+ [6 </home/arbon/Documents/MobAppDev/SecondTask/PNG/Screenshot from 2023-02-20 
+18-33-17.png>]
+<~/Documents/MobAppDev/SecondTask/PNG/Screenshot from 2023-02-20 19-31-44.png, 
+id=45, 485.815pt x 200.75pt>
+File: ~/Documents/MobAppDev/SecondTask/PNG/Screenshot from 2023-02-20 19-31-44.
+png Graphic file (type png)
+<use ~/Documents/MobAppDev/SecondTask/PNG/Screenshot from 2023-02-20 19-31-44.p
+ng>
+Package pdftex.def Info: ~/Documents/MobAppDev/SecondTask/PNG/Screenshot from 2
+023-02-20 19-31-44.png  used on input line 117.
+(pdftex.def)             Requested size: 375.57782pt x 155.19673pt.
+ [7 </home/arbon/Documents/MobAppDev/SecondTask/PNG/Screenshot from 2023-02-20 
+19-31-44.png>]
+<~/Documents/MobAppDev/SecondTask/PNG/Screenshot from 2023-02-20 20-10-08.png, 
+id=51, 485.815pt x 200.75pt>
+File: ~/Documents/MobAppDev/SecondTask/PNG/Screenshot from 2023-02-20 20-10-08.
+png Graphic file (type png)
+<use ~/Documents/MobAppDev/SecondTask/PNG/Screenshot from 2023-02-20 20-10-08.p
+ng>
+Package pdftex.def Info: ~/Documents/MobAppDev/SecondTask/PNG/Screenshot from 2
+023-02-20 20-10-08.png  used on input line 145.
+(pdftex.def)             Requested size: 375.57782pt x 155.19673pt.
+ [8 </home/arbon/Documents/MobAppDev/SecondTask/PNG/Screenshot from 2023-02-20 
+20-10-08.png>]
+<~/Documents/MobAppDev/SecondTask/PNG/Screenshot from 2023-02-20 20-20-10.png, 
+id=56, 678.535pt x 95.35625pt>
+File: ~/Documents/MobAppDev/SecondTask/PNG/Screenshot from 2023-02-20 20-20-10.
+png Graphic file (type png)
+<use ~/Documents/MobAppDev/SecondTask/PNG/Screenshot from 2023-02-20 20-20-10.p
+ng>
+Package pdftex.def Info: ~/Documents/MobAppDev/SecondTask/PNG/Screenshot from 2
+023-02-20 20-20-10.png  used on input line 172.
+(pdftex.def)             Requested size: 375.57782pt x 52.78075pt.
+
+Underfull \hbox (badness 10000) in paragraph at lines 163--176
+[]\T2A/cmr/m/n/14.4 В фай-ле \T2A/cmtt/m/n/14.4 AndroidManifest.xml \T2A/cmr/m/
+n/14.4 опи-сы-ва-ет-ся ка-кие вер-сии
+ []
+
+
+Underfull \hbox (badness 7116) in paragraph at lines 163--176
+\T2A/cmr/m/n/14.4 Android под-дер-жи-ва-ет при-ло-же-ние. Кон-крет-но ука-зы-ва
+-ют-ся ат-ри-
+ []
+
+
+Underfull \hbox (badness 1824) in paragraph at lines 163--176
+\T2A/cmr/m/n/14.4 бу-ты \T2A/cmtt/m/n/14.4 minSdkVersion \T2A/cmr/m/n/14.4 и \T
+2A/cmtt/m/n/14.4 targetSdkVersion \T2A/cmr/m/n/14.4 для эле-мен-та \T2A/cmtt/m/
+n/14.4 <uses-sdk>\T2A/cmr/m/n/14.4 ,
+ []
+
+[9 </home/arbon/Documents/MobAppDev/SecondTask/PNG/Screenshot from 2023-02-20 2
+0-20-10.png>]
+<~/Documents/MobAppDev/SecondTask/PNG/Screenshot from 2023-02-20 20-37-17.png, 
+id=61, 678.535pt x 102.3825pt>
+File: ~/Documents/MobAppDev/SecondTask/PNG/Screenshot from 2023-02-20 20-37-17.
+png Graphic file (type png)
+<use ~/Documents/MobAppDev/SecondTask/PNG/Screenshot from 2023-02-20 20-37-17.p
+ng>
+Package pdftex.def Info: ~/Documents/MobAppDev/SecondTask/PNG/Screenshot from 2
+023-02-20 20-37-17.png  used on input line 185.
+(pdftex.def)             Requested size: 375.57782pt x 56.66986pt.
+<~/Documents/MobAppDev/SecondTask/PNG/Screenshot from 2023-02-20 21-00-16.png, 
+id=62, 678.535pt x 102.3825pt>
+File: ~/Documents/MobAppDev/SecondTask/PNG/Screenshot from 2023-02-20 21-00-16.
+png Graphic file (type png)
+<use ~/Documents/MobAppDev/SecondTask/PNG/Screenshot from 2023-02-20 21-00-16.p
+ng>
+Package pdftex.def Info: ~/Documents/MobAppDev/SecondTask/PNG/Screenshot from 2
+023-02-20 21-00-16.png  used on input line 200.
+(pdftex.def)             Requested size: 375.57782pt x 56.66986pt.
+) [10 </home/arbon/Documents/MobAppDev/SecondTask/PNG/Screenshot from 2023-02-2
+0 20-37-17.png> </home/arbon/Documents/MobAppDev/SecondTask/PNG/Screenshot from
+ 2023-02-20 21-00-16.png>] (./Main.aux (./res/title.aux)
+(./SecondTask/pract2.aux)) ) 
 Here is how much of TeX's memory you used:
- 5068 strings out of 479721
- 86663 string characters out of 5887697
- 377639 words of memory out of 5000000
- 22948 multiletter control sequences out of 15000+600000
- 477087 words of font info for 41 fonts, out of 8000000 for 9000
+ 5175 strings out of 479721
+ 92794 string characters out of 5887697
+ 378714 words of memory out of 5000000
+ 23037 multiletter control sequences out of 15000+600000
+ 477738 words of font info for 43 fonts, out of 8000000 for 9000
  430 hyphenation exceptions out of 8191
- 70i,6n,77p,643b,333s stack positions out of 5000i,500n,10000p,200000b,80000s
- </home/arbon/.texlive2021/texmf-var/fonts/pk/ljfour
-/lh/lh-t2a/labx2488.600pk> </home/arbon/.texlive2021/texmf-var/fonts/pk/ljfour/
-lh/lh-t2a/labx2074.600pk> </home/arbon/.texlive2021/texmf-var/fonts/pk/ljfour/l
-h/lh-t2a/labx1728.600pk> </home/arbon/.texlive2021/texmf-var/fonts/pk/ljfour/lh
-/lh-t2a/labx1440.600pk> </home/arbon/.texlive2021/texmf-var/fonts/pk/ljfour/lh/
-lh-t2a/larm1440.600pk>
-Output written on Main.pdf (6 pages, 110463 bytes).
+ 70i,7n,77p,335b,355s stack positions out of 5000i,500n,10000p,200000b,80000s
+ </home/arbon/.texlive2021/texmf-var/fonts/pk/ljfou
+r/jknappen/ec/tcrm1440.600pk> </home/arbon/.texlive2021/texmf-var/fonts/pk/ljfo
+ur/lh/lh-t2a/latt1440.600pk> </home/arbon/.texlive2021/texmf-var/fonts/pk/ljfou
+r/lh/lh-t2a/labx2488.600pk> </home/arbon/.texlive2021/texmf-var/fonts/pk/ljfour
+/lh/lh-t2a/labx2074.600pk> </home/arbon/.texlive2021/texmf-var/fonts/pk/ljfour/
+lh/lh-t2a/labx1728.600pk> </home/arbon/.texlive2021/texmf-var/fonts/pk/ljfour/l
+h/lh-t2a/labx1440.600pk> </home/arbon/.texlive2021/texmf-var/fonts/pk/ljfour/lh
+/lh-t2a/larm1440.600pk>
+Output written on Main.pdf (10 pages, 240969 bytes).
 PDF statistics:
- 294 PDF objects out of 1000 (max. 8388607)
- 35 compressed objects within 1 object stream
+ 384 PDF objects out of 1000 (max. 8388607)
+ 53 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
- 30 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 75 words of extra memory for PDF output out of 10000 (max. 10000000)
 

@@ -19,18 +19,17 @@
 % for graphics
 \usepackage{graphicx}
 
-\renewcommand{\figurename}{Рисунок}
-
 % redefinition of the list enumerate environment
 \renewenvironment{enumerate}{
 	\begin{list}{\labelenumi}
-	  {\usecounter{enumi} \def\makelabel##1{\hss ##1}
-	\setlength{\itemsep}{0pt}
-	\setlength{\parskip}{0pt}
-	\setlength{\parsep}{0pt}
-	\setlength{\topsep}{0pt}
-	\setlength{\partopsep}{0pt}
-}}{\end{list}}
+		{\usecounter{enumi} \def\makelabel##1{\hss ##1}
+			\setlength{\itemsep}{0pt}
+			\setlength{\parskip}{0pt}
+			\setlength{\parsep}{0pt}
+			\setlength{\topsep}{0pt}
+			\setlength{\partopsep}{0pt}
+		}
+}{ \end{list} }
 
 % redefinition of the list enumeration style
 %\renewcommand{\labelitemi}{$\bullet$}
@@ -40,11 +39,12 @@
 % redefinition of the list itemize environment
 \renewenvironment{itemize}{
 	\begin{list}{\labelitemi}
-	  {\def\makelabel##1{\hss ##1}
-	\setlength{\itemsep}{0pt}
-	\setlength{\parskip}{0pt}
-	\setlength{\parsep}{0pt}
-	\setlength{\topsep}{0pt}
-	\setlength{\partopsep}{0pt}
-}}{\end{list}}
+		{\def\makelabel##1{\hss ##1}
+			\setlength{\itemsep}{0pt}
+			\setlength{\parskip}{0pt}
+			\setlength{\parsep}{0pt}
+			\setlength{\topsep}{0pt}
+			\setlength{\partopsep}{0pt}
+		}
+}{ \end{list} }
 
