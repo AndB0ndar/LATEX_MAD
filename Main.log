@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2023.2.13)  20 FEB 2023 21:08
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2023.2.13)  21 FEB 2023 11:41
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -586,30 +586,93 @@ ng>
 Package pdftex.def Info: ~/Documents/MobAppDev/SecondTask/PNG/Screenshot from 2
 023-02-20 21-00-16.png  used on input line 200.
 (pdftex.def)             Requested size: 375.57782pt x 56.66986pt.
-) [10 </home/arbon/Documents/MobAppDev/SecondTask/PNG/Screenshot from 2023-02-2
-0 20-37-17.png> </home/arbon/Documents/MobAppDev/SecondTask/PNG/Screenshot from
- 2023-02-20 21-00-16.png>] (./Main.aux (./res/title.aux)
-(./SecondTask/pract2.aux)) ) 
+ [10 </home/arbon/Documents/MobAppDev/SecondTask/PNG/Screenshot from 2023-02-20
+ 20-37-17.png> </home/arbon/Documents/MobAppDev/SecondTask/PNG/Screenshot from 
+2023-02-20 21-00-16.png>]
+<~/Documents/MobAppDev/SecondTask/PNG/Screenshot from 2023-02-21 10-58-53.png, 
+id=68, 993.7125pt x 444.66125pt>
+File: ~/Documents/MobAppDev/SecondTask/PNG/Screenshot from 2023-02-21 10-58-53.
+png Graphic file (type png)
+<use ~/Documents/MobAppDev/SecondTask/PNG/Screenshot from 2023-02-21 10-58-53.p
+ng>
+Package pdftex.def Info: ~/Documents/MobAppDev/SecondTask/PNG/Screenshot from 2
+023-02-21 10-58-53.png  used on input line 238.
+(pdftex.def)             Requested size: 375.57782pt x 168.06384pt.
+ [11]
+<~/Documents/MobAppDev/SecondTask/PNG/Screenshot from 2023-02-21 11-02-22.png, 
+id=72, 591.20876pt x 107.40125pt>
+File: ~/Documents/MobAppDev/SecondTask/PNG/Screenshot from 2023-02-21 11-02-22.
+png Graphic file (type png)
+<use ~/Documents/MobAppDev/SecondTask/PNG/Screenshot from 2023-02-21 11-02-22.p
+ng>
+Package pdftex.def Info: ~/Documents/MobAppDev/SecondTask/PNG/Screenshot from 2
+023-02-21 11-02-22.png  used on input line 248.
+(pdftex.def)             Requested size: 375.57782pt x 68.23016pt.
+<~/Documents/MobAppDev/SecondTask/PNG/Screenshot from 2023-02-21 11-20-40.png, 
+id=73, 656.4525pt x 293.095pt>
+File: ~/Documents/MobAppDev/SecondTask/PNG/Screenshot from 2023-02-21 11-20-40.
+png Graphic file (type png)
+<use ~/Documents/MobAppDev/SecondTask/PNG/Screenshot from 2023-02-21 11-20-40.p
+ng>
+Package pdftex.def Info: ~/Documents/MobAppDev/SecondTask/PNG/Screenshot from 2
+023-02-21 11-20-40.png  used on input line 265.
+(pdftex.def)             Requested size: 375.57782pt x 167.69199pt.
+ [12 </home/arbon/Documents/MobAppDev/SecondTask/PNG/Screenshot from 2023-02-21
+ 10-58-53.png> </home/arbon/Documents/MobAppDev/SecondTask/PNG/Screenshot from 
+2023-02-21 11-02-22.png>]
+<~/Documents/MobAppDev/SecondTask/PNG/Screenshot from 2023-02-21 11-24-19.png, 
+id=79, 644.4075pt x 426.59375pt>
+File: ~/Documents/MobAppDev/SecondTask/PNG/Screenshot from 2023-02-21 11-24-19.
+png Graphic file (type png)
+<use ~/Documents/MobAppDev/SecondTask/PNG/Screenshot from 2023-02-21 11-24-19.p
+ng>
+Package pdftex.def Info: ~/Documents/MobAppDev/SecondTask/PNG/Screenshot from 2
+023-02-21 11-24-19.png  used on input line 283.
+(pdftex.def)             Requested size: 375.57782pt x 248.64177pt.
+ [13 </home/arbon/Documents/MobAppDev/SecondTask/PNG/Screenshot from 2023-02-21
+ 11-20-40.png>] [14 </home/arbon/Documents/MobAppDev/SecondTask/PNG/Screenshot 
+from 2023-02-21 11-24-19.png>]
+
+LaTeX Warning: Reference `fig:activity:onPause:content' on page 15 undefined on
+ input line 325.
+
+<~/Documents/MobAppDev/SecondTask/PNG/Screenshot from 2023-02-21 11-36-52.png, 
+id=89, 582.175pt x 148.555pt>
+File: ~/Documents/MobAppDev/SecondTask/PNG/Screenshot from 2023-02-21 11-36-52.
+png Graphic file (type png)
+<use ~/Documents/MobAppDev/SecondTask/PNG/Screenshot from 2023-02-21 11-36-52.p
+ng>
+Package pdftex.def Info: ~/Documents/MobAppDev/SecondTask/PNG/Screenshot from 2
+023-02-21 11-36-52.png  used on input line 328.
+(pdftex.def)             Requested size: 375.57782pt x 95.83876pt.
+) [15 </home/arbon/Documents/MobAppDev/SecondTask/PNG/Screenshot from 2023-02-2
+1 11-36-52.png>] (./Main.aux (./res/title.aux) (./SecondTask/pract2.aux))
+
+LaTeX Warning: There were undefined references.
+
+
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+
+ ) 
 Here is how much of TeX's memory you used:
- 5175 strings out of 479721
- 92794 string characters out of 5887697
- 378714 words of memory out of 5000000
- 23037 multiletter control sequences out of 15000+600000
+ 5220 strings out of 479721
+ 95809 string characters out of 5887697
+ 378755 words of memory out of 5000000
+ 23077 multiletter control sequences out of 15000+600000
  477738 words of font info for 43 fonts, out of 8000000 for 9000
  430 hyphenation exceptions out of 8191
  70i,7n,77p,335b,355s stack positions out of 5000i,500n,10000p,200000b,80000s
- </home/arbon/.texlive2021/texmf-var/fonts/pk/ljfou
-r/jknappen/ec/tcrm1440.600pk> </home/arbon/.texlive2021/texmf-var/fonts/pk/ljfo
-ur/lh/lh-t2a/latt1440.600pk> </home/arbon/.texlive2021/texmf-var/fonts/pk/ljfou
-r/lh/lh-t2a/labx2488.600pk> </home/arbon/.texlive2021/texmf-var/fonts/pk/ljfour
-/lh/lh-t2a/labx2074.600pk> </home/arbon/.texlive2021/texmf-var/fonts/pk/ljfour/
-lh/lh-t2a/labx1728.600pk> </home/arbon/.texlive2021/texmf-var/fonts/pk/ljfour/l
-h/lh-t2a/labx1440.600pk> </home/arbon/.texlive2021/texmf-var/fonts/pk/ljfour/lh
-/lh-t2a/larm1440.600pk>
-Output written on Main.pdf (10 pages, 240969 bytes).
+ </home/arbon/.texlive2021/texmf-var/fonts/pk/ljfour/jknappen/ec/tcrm1440.600
+pk> </home/arbon/.texlive2021/texmf-var/fonts/pk/ljfour/lh/lh-t2a/latt1440.600p
+k> </home/arbon/.texlive2021/texmf-var/fonts/pk/ljfour/lh/lh-t2a/labx2488.600pk
+> </home/arbon/.texlive2021/texmf-var/fonts/pk/ljfour/lh/lh-t2a/labx2074.600pk>
+ </home/arbon/.texlive2021/texmf-var/fonts/pk/ljfour/lh/lh-t2a/labx1728.600pk> 
+</home/arbon/.texlive2021/texmf-var/fonts/pk/ljfour/lh/lh-t2a/labx1440.600pk> <
+/home/arbon/.texlive2021/texmf-var/fonts/pk/ljfour/lh/lh-t2a/larm1440.600pk>
+Output written on Main.pdf (15 pages, 467674 bytes).
 PDF statistics:
- 384 PDF objects out of 1000 (max. 8388607)
- 53 compressed objects within 1 object stream
+ 458 PDF objects out of 1000 (max. 8388607)
+ 64 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
- 75 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 100 words of extra memory for PDF output out of 10000 (max. 10000000)
 
