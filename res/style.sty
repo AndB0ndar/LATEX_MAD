@@ -24,7 +24,10 @@
 \lstset{
 	basicstyle=\small,
 	captionpos=t,
-	frame=single
+	%frame=single,
+	showspaces=flase,
+	showstringspaces=false,
+	showtabs=false
 }
 
 \usepackage{boxedminipage}
@@ -40,9 +43,13 @@
 \setlist{nosep}
 \setlist[enumerate]{label*=\arabic*.}
 
+% for non-end-to-end numbering
+%\usepackage{chngcntr}
+%\counterwithin{figure}{section}
+%\counterwithin{table}{section}
+
 
 \providecommand{\No}{\textnumero}
-
 
 %\setlength{\abovecaptionskip}{3pt}
 %\setlength{\belowcaptionskip}{3pt}

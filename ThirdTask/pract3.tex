@@ -288,6 +288,7 @@ second\_layout.xml.\par
 	\item mm: миллиметры
 	\item in: дюймы
 \end{itemize}
+
 Предпочтительными единицами для использования являются dp. Это связано
 с тем, что мир мобильных устройств на Android сильно фрагментирован в
 плане разрешения и размеров экрана. И чем больше плотность пикселей на
@@ -327,6 +328,7 @@ Java. Например, некоторые методы принимают в к
 	\item COMPLEX\_UNIT\_SP - sp или независимые от масштабирования
 		пиксели (scale-independent pixels).
 \end{itemize}
+
 Параметр value представляет значение, которое надо преобразовать.
 Параметр metrics представляет информацию о метрике, в рамках которой
 надо выполнить преобразование.\par
@@ -377,13 +379,13 @@ LinearLayout, GridLayout, TableLayout, ConstraintLayout, FrameLayout. Все
 Для наглядности в TextView применяет атрибут android:background,
 который представляет фон и в данном случае окрашивает элемент
 в цвет "<\#FFBB86FC">, благодаря чему можно увидеть занимаемую им область
-(Рисунок~\ref{fig:xm:set_hw}).
+(Рисунок~\ref{fig:xm:set:hw}).
 
 \begin{figure}[h!tp]
 	\centering
 	\includegraphics[width=0.8\textwidth]{Screenshot from 2023-03-10 12-42-04.png}
 	\caption{Использование агрумента match\_parent}
-	\label{fig:xm:set_hw}
+	\label{fig:xm:set:hw}
 \end{figure}
 
 \subsection{wrap\_content}
@@ -393,13 +395,13 @@ LinearLayout, GridLayout, TableLayout, ConstraintLayout, FrameLayout. Все
 \section{Программная установка ширины и высоты}
 Если элемент, к примеру, тот же TextView создается в коде java, то для
 установки высоты и ширины можно использовать метод setLayoutParams().
-Так, как показано на рисунке~\ref{fig:java:set_hw}.
+Так, как показано на рисунке~\ref{fig:java:set:hw}.
 
 \begin{figure}[h!tp]
 	\centering
 	\includegraphics[width=0.9\textwidth]{Screenshot from 2023-03-10 12-53-59.png}
 	\caption{Установка ширины и высоты в коде Джава}
-	\label{fig:java:set_hw}
+	\label{fig:java:set:hw}
 \end{figure}
 
 В метод \texttt{setLayoutParams()} передается объект ViewGroup.LayoutParams.
@@ -457,18 +459,192 @@ android:layout\_marginTop, android:layout\_marginLeft} и
 LayoutParams для того контейнера, который применяется.
 И затем вызвать у этого объекта LayoutParams метод
 \texttt{setMargins(left, top, right, bottom)}.
-Пример использования этих методов показан на рисунке~\ref{fig:java:pd_mrg}.
+Пример использования этих методов показан на рисунке~\ref{fig:java:pd:mrg}.
 
 \begin{figure}[h!tp]
 	\centering
 	\includegraphics[width=0.9\textwidth]{Screenshot from 2023-03-10 13-16-40.png}
 	\caption{Использование padding в разметке}
-	\label{fig:java:pd_mrg}
+	\label{fig:java:pd:mrg}
 \end{figure}
 
+\section{ConstraintLayout}
+ConstraintLayout представляет контейнер, который позволяет создавать
+гибкие и масштабируемые визуальные интерфейсы.\par
+Для позиционирования элемента внутри ConstraintLayout необходимо указать
+ограничения (constraints).\par
+Каждое ограничение устанавливает позиционирование элемента либо по
+горизонтали, либо по вертикали. И для определения позиции элемента в
+ConstraintLayout необходимо указать как минимум одно ограничение по
+горизонтали и одно ограничение по вертикали.\par
+Позиционирования может производиться относительно границ самого
+контейнера ContentLayout (в этом случае ограничение имеет значение parent),
+либо же относительно любого другого элемента внутри ConstraintLayout,
+тогда в качестве значения ограничения указывается id этого элемента.\par
 
-%13.Реализуйте примеры применения контейнера ConstraintLayout.
-%(позиционирование,сдвиг, горизонтальная цепочка элементов, вес
-%элемента, горизонтальный ряд виджетов, вертикальная цепочка,
-%программное создание ConstraintLayout )
+\subsection{Позиционирование в центре}
+Если необходимо расположить элемент в центре контейнера по горизонтали,
+то надо использовать следующую пару атрибутов, как показано на
+рисунке~\ref{fig:xml:pos:cent}.
+
+\begin{figure}[h!tp]
+	\centering
+	\includegraphics[width=0.8\textwidth]{Screenshot from 2023-03-11 18-44-28.png}
+	\caption{Использование padding в разметке}
+	\label{fig:xml:pos:cent}
+\end{figure}
+
+\subsection{Сдвиг}
+Если элементы расположены по центру, ConstraintLayout позволяет их
+сдвигать по горизонтали и по вертикали. Для сдвига по горизонтали
+применяется атрибут \texttt{layout\_constraintHorizontal\_bias},
+а для сдвига по вертикали --- атрибут
+\texttt{layout\_constraintVertical\_bias}.
+В качестве значения они принимают число с плавающей точкой от 0 до 1.
+Значение по умолчанию --- 0.5 (расположение по центру). Пример представлен
+на рисунке~\ref{fig:xml:shift}.
+
+\begin{figure}[h!tp]
+	\centering
+	\includegraphics[width=0.8\textwidth]{Screenshot from 2023-03-11 18-55-02.png}
+	\caption{Использование padding в разметке}
+	\label{fig:xml:shift}
+\end{figure}
+
+\subsection{Горизонтальная цепочка элементов}
+Горизонтальная цепочка элементов достигается за счет двух факторов:
+\begin{itemize}
+	\item Первый элемент выравнивается относительно левой границы
+		контейнера (\texttt{app:layout\_constraintLeft\_toLeftOf="parent"})
+		, последний
+		элемент выравнивается относительно правой границы контейнера
+		(\texttt{app:layout\_constraintRight\_toRightOf="parent"}).
+	\item Благодаря установке атрибутов
+		\texttt{app:layout\_constraintLeft\_toRightOf} и
+		\texttt{app:layout\_constraintRight\_toLeftOf}
+		располагаем один элемент справа или слева от другого.
+\end{itemize}
+
+Кроме того, ConstraintLayout позволяет настроить положение элементов
+внутри цепочки. Для этого применяется атрибут
+\texttt{layout\_constraintHorizontal\_chainStyle},
+который может принимать следующие значения:
+\label{tag:chain:style}
+\begin{itemize}
+	\item \texttt{spread}: значение по умолчанию, при котором элементы цепочки
+		равномерно растягиваются по всей длине цепочки, как в примере выше
+	\item \texttt{spread\_inside}: первый и последний элемент цепочки
+		примыкают к границами контейнера
+	\item \texttt{packed}: элементы цепочки располагаются вплотную
+		друг к другу.
+\end{itemize}
+
+Ряд элементов по горизонтали, проиллюстрирован на
+рисунке~\ref{fig:xml:chain:horizontal}.
+
+\begin{figure}[h!tp]
+	\centering
+	\includegraphics[width=0.8\textwidth]{Screenshot from 2023-03-12 15-46-21.png}
+	\caption{Пример горизонталоной цепочки элементов}
+	\label{fig:xml:chain:horizontal}
+\end{figure}
+
+\subsection{Вес элемента}
+Если нужно, чтобы один элемент был два раза больше другого, можно с
+помощью атрибута \texttt{layout\_constraintHorizontal\_weight}. Однако следует
+учитывать, что при применении весов у элементов, они должны иметь
+нулевую ширину (Рисунок~\ref{fig:xml:chain:horizontal:weight}).
+
+\begin{figure}[h!tp]
+	\centering
+	\includegraphics[width=0.8\textwidth]{Screenshot from 2023-03-12 16-10-36.png}
+	\caption{Пример горизонталоной цепочки элементов}
+	\label{fig:xml:chain:horizontal:weight}
+\end{figure}
+
+В качестве значения атрибут \texttt{layout\_constraintHorizontal\_weight}
+принимает число --- вес элемента.
+
+\subsection{Вертикальная цепочка}
+Для образования вертикальной цепочки также должно соблюдаться два
+условия:
+\begin{itemize}
+	\item Первый элемент выравнивается относительно левой границы
+		контейнера (\texttt{app:layout\_constraintTop\_toTopOf="parent"})
+		, последний
+		элемент выравнивается относительно правой границы контейнера
+		(\texttt{app:layout\_constraintBottom\_toBottomOf="parent"}).
+	\item Благодаря установке атрибутов
+		\texttt{app:layout\_constraintTop\_toBottomOf} и
+		\texttt{app:layout\_constraintBottom\_toTopOf}
+		располагаем один элемент справа или слева от другого.
+\end{itemize}
+
+Чтобы настроить положение элементов внутри цепочки, применяется
+атрибут \texttt{layout\_constraintVertical\_chainStyle},
+который может принимать теже значения, что обсуждались
+на странице~\pageref{tag:chain:style}.
+
+Ряд элементов по горизонтали, проиллюстрирован на
+рисунке~\ref{fig:xml:chain:vertical}.
+
+\begin{figure}[h!tp]
+	\centering
+	\includegraphics[width=0.8\textwidth]{Screenshot from 2023-03-12 16-27-32.png}
+	\caption{Пример горизонталоной цепочки элементов}
+	\label{fig:xml:chain:vertical}
+\end{figure}
+
+\subsection{Программное создание ConstraintLayout}
+Для создания контейнера в коде Java применяется одноименный класс
+ConstraintLayout, для создания объекта которого в конструктор передаются
+значения для ширины и высоты элемента:
+
+\begin{lstlisting}[
+	language=Java
+]
+ConstraintLayout.LayoutParams layoutParams = 
+new ConstraintLayout.LayoutParams(
+	ConstraintLayout.LayoutParams.WRAP_CONTENT
+	, ConstraintLayout.LayoutParams.WRAP_CONTENT
+	);
+\end{lstlisting}
+
+Первый параметр устанавливает щирину элемента, а второй - высоту.
+\texttt{ConstraintLayout.LayoutParams.WRAP\_CONTENT} указывает, что элемент
+будет иметь те размеры, которые необходимы для того, чтобы вывести на
+экран его содержимое. Кроме
+\texttt{ConstraintLayout.LayoutParams.WRAP\_CONTENT} можно применять
+константу \texttt{ConstraintLayout.LayoutParams.MATCH\_CONSTRAINT}, которая
+аналогична применению значения "0dp" в атрибутах layout\_width и
+layout\_height и которая растягивает элемент по ширине или высоте
+контейнера.\par
+Для настройки позиционирования внутри ConstraintLayout применяется класс
+ConstraintLayout.LayoutParams. Он имеет довольно много функционала.\par
+В качестве значения эти поля принимают id (идентификатор) элемента,
+относительно которого выполняется позиционирование. Если расположение
+устанавливается относительно контейнера ConstraintLayout, то применяется
+константа \texttt{ConstraintLayout.LayoutParams.PARENT\_ID}.
+
+Пример проиллюстрирован на рисунке~\ref{fig:java:constrainly}
+
+\begin{figure}[h!tp]
+	\centering
+	\includegraphics[width=0.8\textwidth]{Screenshot from 2023-03-12 16-48-44.png}
+	\caption{Программная реализация ConstraintLayout}
+	\label{fig:java:constrainly}
+\end{figure}
+
+\clearpage
+
+\section*{\LARGE{Вывод}}
+\addcontentsline{toc}{section}{Вывод}
+В данной работе были изучен порядок выполнения приложения
+в проекте Android Studio, создание и применение графического интерфейса,
+режим кода и графический режим. Была освоена работа с файлом разметки.
+Научились создавать интерфейс в коде java, бъявлять элементы интерфейса в XML.
+А также реализовывать получение и управление визуальными элементами в коде,
+определять размеры экрана вашего устройства на Android,
+устанавливать размеры в коде Java, ширину и высоту визуальных элементов в XML.
+Освоили контейнер ConstraintLayout.
 
