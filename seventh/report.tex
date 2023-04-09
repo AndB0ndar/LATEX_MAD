@@ -44,19 +44,44 @@ application. Ряд настроек задаются с помощью атри
 		каталога \textbf{res/values/themes}.
 \end{itemize}
 
-Пример использования показан на рисунке~\ref{}.
+Пример использования показан в листнинге~\ref{lst:manifest:simple}.
 
-\begin{lstlisting}[language=Java
+\begin{lstlisting}[language=XML
 	, caption=\leftline{}
-	, label=
+	, label=lst:manifest:simple
 	]
+<application
+	android:allowBackup="true"
+	android:dataExtractionRules="@xml/data_extraction_rules"
+	android:fullBackupContent="@xml/backup_rules"
+	android:icon="@mipmap/ic_launcher"
+	android:label="@string/app_name"
+	android:roundIcon="@mipmap/ic_launcher_round"
+	android:supportsRtl="true"
+	android:theme="@style/Theme.Seventh"
+	tools:targetApi="31">
+	<activity
+		android:name=".MainActivity"
+		android:exported="true">
+		<intent-filter>
+			<action android:name="android.intent.action.MAIN" />
+
+			<category android:name="android.intent.category.LAUNCHER" />
+		</intent-filter>
+
+		<meta-data
+			android:name="android.app.lib_name"
+			android:value="" />
+	</activity>
+</application>
 \end{lstlisting}
 
 Элемент \texttt{intent-filter} в MainActivity указывает,
-как данная activity будет использоваться. В частности, с помощью узла action
-\texttt{android:name="android.intent.action.MAIN"}, что данная activity будет
+как данная activity будет использоваться. В частности, с помощью узла
+\texttt{action android:name="android.intent.action.MAIN"},
+что данная activity будет
 входной точкой в приложение и не должна получать какие-либо данные извне.\par
-Элемент category \texttt{android:name="android.intent.category.LAUNCHER"}
+Элемент \texttt{category android:name="android.intent.category.LAUNCHER"}
 указывает, что MainActivity будет представлять стартовый экран, который
 отображается при запуске приложения.\par
 Файл манифеста может содержать множество элементов, которые имеют
@@ -67,12 +92,21 @@ application. Ряд настроек задаются с помощью атри
 \section{Определение версии}
 С помощью атрибутов элемента manifest можно определить версию
 приложения и его кода.\par
-Пример использования показан на рисунке~\ref{}.
+Пример использования показан в листнинге~\ref{lst:version}.
 
-\begin{lstlisting}[language=Java
+\begin{lstlisting}[language=XML
 	, caption=\leftline{}
-	, label=
+	, label=lst:version
 	]
+<manifest
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:versionName="1.0"
+    android:versionCode="1">
+
+	...
+
+</manifest>
 \end{lstlisting}
 
 Атрибут \texttt{android:versionName} указывает на номер версии, который будет
@@ -97,12 +131,23 @@ application. Ряд настроек задаются с помощью атри
 
 Версия определяется номером API, например, \texttt{Jelly Beans 4.1}
 имеет версию 16, а \texttt{Android 11} имеет версию 30.\par
-Пример использования показан на рисунке~\ref{}.
+Пример использования показан в листнинге~\ref{lst:sdk}.
 
-\begin{lstlisting}[language=Java
+\begin{lstlisting}[language=XML
 	, caption=\leftline{}
-	, label=
+	, label=lst:sdk
 	]
+<manifest
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:versionName="1.0"
+    android:versionCode="1">
+
+    <uses-sdk android:minSdkVersion="22" android:targetSdkVersion="33" />
+
+	...
+
+</manifest>
 \end{lstlisting}
 
 \section{Установка разрешений}
@@ -111,12 +156,24 @@ application. Ряд настроек задаются с помощью атри
 могло работать с тем же списком контактов, в файле манифесте необходимо
 установить соответствующие разрешения. Для установки разрешений
 применяется элемент \texttt{<uses-permission>}.\par
-Пример использования показан на рисунке~\ref{}.
+Пример использования показан в листнинге~\ref{lst:permission}.
 
-\begin{lstlisting}[language=Java
+\begin{lstlisting}[language=XML
 	, caption=\leftline{}
-	, label=
+	, label=lst:permission
 	]
+<manifest
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:versionName="1.0"
+    android:versionCode="1">
+
+    <uses-sdk android:minSdkVersion="22" android:targetSdkVersion="33" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+
+	...
+
+</manifest>
 \end{lstlisting}
 
 Атрибут \texttt{android:name} устанавливает название разрешения: в данном
@@ -130,12 +187,25 @@ application. Ряд настроек задаются с помощью атри
 И бывают случаи, когда надо ограничить использование приложения для
 определенных разрешений экранов. Для этого в файле манифеста
 определяется элемент \texttt{<supports-screens>}.\par
-Пример использования показан на рисунке~\ref{}.
+Пример использования показан в листнинге~\ref{}.
 
-\begin{lstlisting}[language=Java
+\begin{lstlisting}[language=XML
 	, caption=\leftline{}
 	, label=
 	]
+<manifest
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+	<supports-screens
+	 android:largeScreens="true"
+	 android:normalScreens="true"
+	 android:smallScreens="false"
+	 android:xlargeScreens="true" />
+
+	...
+
+</manifest>
 \end{lstlisting}
 
 Данный элемент принимает четыре атрибута:
@@ -157,12 +227,26 @@ application. Ряд настроек задаются с помощью атри
 использовало только одну ориентацию. Для этого в файле манифеста у
 требуемой activity надо установить атрибут android:screenOrientation.
 Например, запретим альбомную ориентацию.\par
-Пример использования показан на рисунке~\ref{}.
+Пример использования показан в листнинге~\ref{lst:orientation}.
 
-\begin{lstlisting}[language=Java
+\begin{lstlisting}[language=XML
 	, caption=\leftline{}
-	, label=
+	, label=lst:orientation
 	]
+<activity
+	android:name=".MainActivity"
+	android:exported="true"
+	android:screenOrientation="portrait">
+	<intent-filter>
+		<action android:name="android.intent.action.MAIN" />
+
+		<category android:name="android.intent.category.LAUNCHER" />
+	</intent-filter>
+
+	<meta-data
+		android:name="android.app.lib_name"
+		android:value="" />
+</activity>
 \end{lstlisting}
 
 Значение \texttt{android:screenOrientation="portrait"} указывает,
@@ -190,12 +274,20 @@ startActivity(intent);
 который используется объектом Intent и представляет передаваемые в задачу
 данные (фактически класс activity, которую мы будем запускать).\par
 Теперь рассмотрим реализацию перехода от одной Activity к другой.
-Пример показан на рисунке~\ref{}.
+Пример показан в листнинге~\ref{lst:intent}.
 
 \begin{lstlisting}[language=Java
 	, caption=\leftline{}
-	, label=
+	, label=lst:intent
 	]
+Button button = findViewById(R.id.button);
+button.setOnClickListener(new View.OnClickListener() {
+	@Override
+	public void onClick(View v) {
+		Intent intent = new Intent(MainActivity.this, SecondActivity.class);
+		startActivity(intent);
+	}
+});
 \end{lstlisting}
 
 \section{Передача данных между Activity}
@@ -236,27 +328,85 @@ String name = arguments.get("hello").toString();
 		интерфейса Serializable.
 \end{itemize}
 
-Пример использования показан на рисунке~\ref{}.
+Пример использования показан в
+листнингах~\ref{lst:intent:put}\,-\,\ref{lst:intent:get}..
 
 \begin{lstlisting}[language=Java
 	, caption=\leftline{}
-	, label=
+	, label=lst:intent:put
 	]
+Button button = findViewById(R.id.button);
+button.setOnClickListener(new View.OnClickListener() {
+	@Override
+	public void onClick(View v) {
+		Intent intent = new Intent(MainActivity.this, SecondActivity.class);
+
+		EditText editText = findViewById(R.id.input);
+		intent.putExtra("msg", editText.getText().toString());
+		
+		startActivity(intent);
+	}
+});
+\end{lstlisting}
+
+\begin{lstlisting}[language=Java
+	, caption=\leftline{}
+	, label=lst:intent:get
+	]
+Bundle arguments = getIntent().getExtras();
+String msg = arguments.get("msg").toString();
+
+TextView textView = findViewById(R.id.output);
+textView.setText(msg);
 \end{lstlisting}
 
 \section{Передача сложных объектов}
 В Android можно передавать передавать сложные объекты.
 В этом случае используется механизм сериализации.\par
 Для получения данных применяется метод \texttt{getSerializable()},
-поскольку класс User реализует интерфейс Serializable.
+поскольку класс Msg (Листнинг~\ref{lst:model:msg})
+реализует интерфейс Serializable.
 Таким образом, мы можем передать один единственый объект вместо набора
 разрозненных данных.\par
-Пример использования показан на рисунке~\ref{}.
+Пример использования показан в листнинге~\ref{lst:serializable}.
 
 \begin{lstlisting}[language=Java
 	, caption=\leftline{}
-	, label=
+	, label=lst:model:msg
 	]
+public class Msg implements Serializable {
+	private String message;
+
+	public Msg(String message) {
+		this.message = message;
+	}
+
+	public String getMessage() {
+		return message;
+	}
+
+	public void setMessage(String message) {
+		this.message = message;
+	}
+}
+\end{lstlisting}
+
+\begin{lstlisting}[language=Java
+	, caption=\leftline{}
+	, label=lst:serializable
+	]
+Button button = findViewById(R.id.button);
+button.setOnClickListener(new View.OnClickListener() {
+	@Override
+	public void onClick(View v) {
+		Intent intent = new Intent(MainActivity.this, SecondActivity.class);
+
+		Msg msg = new Msg(editText.getText().toString());
+		intent.putExtra("model:msg", msg);
+
+		startActivity(intent);
+	}
+});
 \end{lstlisting}
 
 \section{Parcelable}
@@ -265,19 +415,56 @@ String name = arguments.get("hello").toString();
 интерфейс Parcelable, который, по сути, также позволяет сериализовать
 объекты, как и Serializable, но является более оптимизированным для
 Android. И подобные объекты Parcelable также можно передавать между
-двумя activity или использовать каким-то иным образом.\par
-Пример использования показан на рисунке~\ref{}.
+двумя activity или использовать каким-то иным образом
+(Листнинг~\ref{lst:model:parcelable}).
 
 \begin{lstlisting}[language=Java
 	, caption=\leftline{}
-	, label=
+	, label=lst:model:parcelable
 	]
+public class MsgP implements Parcelable {
+	private String message;
+
+	public String getMessage() {
+		return message;
+	}
+
+	public void setMessage(String message) {
+		this.message = message;
+	}
+
+	protected MsgP(Parcel in) {
+		message = in.readString();
+	}
+
+	public static final Creator<MsgP> CREATOR = new Creator<MsgP>() {
+		@Override
+		public MsgP createFromParcel(Parcel in) {
+			return new MsgP(in);
+		}
+
+		@Override
+		public MsgP[] newArray(int size) {
+			return new MsgP[size];
+		}
+	};
+
+	@Override
+	public int describeContents() {
+		return 0;
+	}
+
+	@Override
+	public void writeToParcel(@NonNull Parcel dest, int flags) {
+		dest.writeString(message);
+	}
+}
 \end{lstlisting}
 
 Интерфейс android.os.Parcelable предполагает реализацию двух методов:
-describeContents() и writeToParcel(). Первый метод описывает контент и
-возвращает некторое числовое значение. Второй метод пишет в объект Parcel
-содержимое объекта User.
+\texttt{describeContents()} и \texttt{writeToParcel()}.
+Первый метод описывает контент и возвращает некторое числовое значение.
+Второй метод пишет в объект Parcel содержимое объекта MsgP.
 Для записи данных объекта в Parcel используется ряд методов, каждый из
 которых предназначен для определенного типа данных. Основные методы:
 \begin{itemize}
@@ -287,24 +474,36 @@ describeContents() и writeToParcel(). Первый метод описывае�
 	\item \texttt{writeDouble()};
 	\item \texttt{writeByte()};
 	\item \texttt{writeLong()};
-	\item \textbf{writeIntArray()};
+	\item \texttt{writeIntArray()};
 	\item \texttt{writeValue()} (записывает объект типа Object);
 	\item \texttt{writeParcelable()} (записывает объект типа Parcelable).
 \end{itemize}
 
 Кроме того, объект Parcelable должен содержать статическое поле
-CREATOR, которое представляет объект Creator<User>. Причем этот объект
+CREATOR, которое представляет объект Creator<MsgP>. Причем этот объект
 реализует два метода. Они нужны для создания их ранее сериализованных
-данных исходных объектов типа User.\par
-Так, метод \texttt{newArray()} создает массив объект User.
-Метод \texttt{createFromParcel} создает из Parcel новый объект типа User.
+данных исходных объектов типа MsgP.\par
+Так, метод \texttt{newArray()} создает массив объект MsgP.
+Метод \texttt{createFromParcel} создает из Parcel новый объект типа MsgP.
 То есть этот метод противоположен по действию методу \texttt{writeToParcel}.
 Для получения данных из Parcel применяются методы типа \texttt{readString()},
 \texttt{readInt()}, \texttt{readParcelable()} и так далее --- для чтения
 определенных типов данных.\par
 Причем важно, что данные в \texttt{createFromParcel} считываются из объекта
 Parcel именно в том порядке, в котором они добавляются в этот объект в методе
-\texttt{writeToParcel}.
+\texttt{writeToParcel}.\par
+Пример использования показан в листнинге~\ref{lst:parcelable}.
+
+\begin{lstlisting}[language=Java
+	, caption=\leftline{}
+	, label=lst:parcelable
+	]
+Bundle arguments = getIntent().getExtras();
+MsgP msgP = arguments.getParcelable("model:msg:p");
+
+TextView textView = findViewById(R.id.output);
+textView.setText(msgP.getMessage());
+\end{lstlisting}
 
 \section{Получение результата из Activity}
 Мы можем не только передавать данные запускаемой activity, но и ожидать
@@ -345,37 +544,76 @@ Result API предоставляет метод \texttt{registerForActivityResu
 объектом \texttt{ActivityResultContracts} в качестве входного.
 
 \subsection{Практическое применение Activity Result API}
-Пример использования показан на рисунке~\ref{}.
+Пример использования показан в листнинге~\ref{lst:activity_result}.
 
-\begin{lstlisting}[language=Xml
+\begin{lstlisting}[language=Java
 	, caption=\leftline{}
-	, label=
+	, label=lst:activity_result
 	]
+public class ThirdActivity extends AppCompatActivity {
+	static final String AGE_KEY = "AGE";
+	static final String ACCESS_MESSAGE="ACCESS_MESSAGE";
+
+	ActivityResultLauncher<Intent> mStartForResult =
+			registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+					new ActivityResultCallback<ActivityResult>() {
+						@Override
+						public void onActivityResult(ActivityResult result) {
+							TextView textView = findViewById(R.id.textView);
+							if(result.getResultCode() == Activity.RESULT_OK){
+								Intent intent = result.getData();
+								String accessMessage =
+										intent.getStringExtra(ACCESS_MESSAGE);
+								textView.setText(accessMessage);
+							}
+							else{
+								textView.setText("Error");
+							}
+						}
+					});
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_third);
+	}
+
+	public void onClick(View view) {
+		EditText ageBox = findViewById(R.id.age);
+		String age = ageBox.getText().toString();
+		Intent intent = new Intent(this, MainActivity.class);
+		intent.putExtra(AGE_KEY, age);
+		mStartForResult.launch(intent);
+	}
+}
 \end{lstlisting}
 
 \section{Взаимодействие между Activity}
 В прошлых темах мы рассмотрели жизненный цикл activity и запуск новых
 activity с помощью объекта Intent. Теперь рассмотрим некоторые
-особенности взаимодействия между четырьмя activity в одном приложении.\par
-Пример использования показан на рисунке~\ref{}.
-
-\begin{lstlisting}[language=Java
-	, caption=\leftline{}
-	, label=
-	]
-\end{lstlisting}
+особенности взаимодействия между четырьмя activity в одном приложении.
 
 \subsection{Управление стеком activity}
 Для управления стеком из activity Android предлагает нам использовать
 флаги --- константы, определенные в классе Intent. Применение
 определенного флага позволит нам определенным образом изменить
 положение в стеке для определенных activity.\par
-Пример использования показан на рисунке~\ref{}.
+Пример использования показан в листнинге~\ref{lst:intent:stack}.
 
 \begin{lstlisting}[language=Java
 	, caption=\leftline{}
-	, label=
+	, label=lst:intent:stack
 	]
+Button button = findViewById(R.id.button);
+button.setOnClickListener(new View.OnClickListener() {
+	@Override
+	public void onClick(View v) {
+		Intent intent = new Intent(SecondActivity.this, MainActivity.class);
+		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
+				Intent.FLAG_ACTIVITY_SINGLE_TOP);
+		startActivity(intent);
+	}
+});
 \end{lstlisting}
 
 \clearpage
