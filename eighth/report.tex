@@ -72,6 +72,23 @@ public class ContentFragment extends Fragment {
 	, caption=\leftline{}
 	, label=lst:xml:fragment:action
 	]
+private static int count = 0;
+
+@Override
+public void onViewCreated(@NonNull View view, @Nullable Bundle
+		savedInstanceState) {
+	super.onViewCreated(view, savedInstanceState);
+	Button updateButton = view.findViewById(R.id.updateButton);
+	TextView updateBox = view.findViewById(R.id.dateTextView);
+	updateBox.setText(String.valueOf(count));
+	updateButton.setOnClickListener(new View.OnClickListener() {
+		@Override
+		public void onClick(View v) {
+			++count;
+			updateBox.setText(String.valueOf(count));
+		}
+	});
+}
 \end{lstlisting}
 
 \section{Добавление фрагмента в коде}
@@ -98,6 +115,18 @@ public class ContentFragment extends Fragment {
 	, caption=\leftline{Реализация фаргмента в Java коде}
 	, label=lst:java:frg:java
 	]
+@Override
+protected void onCreate(Bundle savedInstanceState) {
+	super.onCreate(savedInstanceState);
+	setContentView(R.layout.activity_main);
+	if (savedInstanceState == null) {
+		getSupportFragmentManager().beginTransaction()
+				.add(R.id.fragment_container_view
+					, ContentFragment.class
+					, null)
+				.commit();
+	}
+}
 \end{lstlisting}
 
 Метод \texttt{getSupportFragmentManager()} возвращает объект FragmentManager,
@@ -127,6 +156,23 @@ ContentFragment())} --- первым аргументом передается �
 	, caption=\leftline{}
 	, label=lst:xml:frg:first
 	]
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+    <ListView
+        android:id="@+id/countriesList"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+    </ListView>
+</androidx.constraintlayout.widget.ConstraintLayout>
 \end{lstlisting}
 
 Разметка второго фрагмента показана в листнинге~\ref{lst:xml:frg:second}.
@@ -135,6 +181,24 @@ ContentFragment())} --- первым аргументом передается �
 	, caption=\leftline{}
 	, label=lst:xml:frg:second
 	]
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+    <TextView
+        android:id="@+id/detailsText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="No select"
+        android:textSize="22sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+</androidx.constraintlayout.widget.ConstraintLayout>
 \end{lstlisting}
 
 Фрагменты не могут напрямую взаимодействовать между собой. Для этого
@@ -147,7 +211,6 @@ ContentFragment())} --- первым аргументом передается �
 interface OnFragmentSendDataListener {
 	void onSendData(String data);
 }
-
 private OnFragmentSendDataListener fragmentSendDataListener;
 \end{verbatim}
 
@@ -171,12 +234,30 @@ fragmentSendDataListener.onSendData(selectedItem);
 Таким образом, при выборе объекта в списке MainActivity получит
 выбранный объект.
 
-И в конце изменим код MainActivity, как показано в листнинге~\ref{}.
+И в конце изменим код MainActivity, как показано
+в листнинге~\ref{lst:interaction:main}.
 
 \begin{lstlisting}[language=Java
 	, caption=\leftline{}
-	, label=
+	, label=lst:interaction:main
 	]
+public class MainActivity
+	extends AppCompatActivity
+	implements ListFragment.OnFragmentSendDataListener {
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_main_1_7);
+	}
+
+	@Override
+	public void onSendData(String selectedItem) {
+		DetailFragment fragment = (DetailFragment) getSupportFragmentManager()
+				.findFragmentById(R.id.detailFragment);
+		if (fragment != null)
+			fragment.setSelectedItem(selectedItem);
+	}
+}
 \end{lstlisting}
 
 Для взаимодействия фрагмента ListFragment c другим фрагментом через
@@ -214,6 +295,31 @@ fragmentSendDataListener устанавливается как MainActivity, п�
 	, caption=\leftline{}
 	, label=lst:xml:frg:orient
 	]
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/listFragment"
+		android:layout_width="0dp"
+		android:layout_height="0dp"
+		android:name="com.example.eighth.ListFragment"
+		app:layout_constraintLeft_toLeftOf="parent"
+		app:layout_constraintTop_toTopOf="parent"
+		app:layout_constraintRight_toLeftOf="@id/detailFragment"
+		app:layout_constraintBottom_toBottomOf="parent" />
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/detailFragment"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:name="com.example.eighth.DetailFragment"
+        app:layout_constraintLeft_toRightOf="@id/listFragment"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"/>
+</androidx.constraintlayout.widget.ConstraintLayout>
 \end{lstlisting}
 
 Теперь рассмотрим, как более удачно расположить фрагменты при
@@ -252,16 +358,59 @@ fragmentSendDataListener устанавливается как MainActivity, п�
 	, caption=\leftline{}
 	, label=lst:java:frg:orient
 	]
+@Override
+protected void onCreate(Bundle savedInstanceState) {
+	super.onCreate(savedInstanceState);
+	if (getResources().getConfiguration().orientation ==
+			Configuration.ORIENTATION_LANDSCAPE) {
+		finish();
+		return;
+	}
+	setContentView(R.layout.activity_detail);
+	Bundle extras = getIntent().getExtras();
+	if (extras != null)
+		selectedItem = extras.getString(SELECTED_ITEM);
+}
 
+@Override
+protected void onResume() {
+	super.onResume();
+	DetailFragment fragment = (DetailFragment) getSupportFragmentManager()
+			.findFragmentById(R.id.detailFragment);
+	if (fragment != null)
+		fragment.setSelectedItem(selectedItem);
+}
+\end{lstlisting}
+
+Код MainActivity при этом будет выглядеть как показано
+в листнинг~\ref{lst:java:main:orient}.
+
+\begin{lstlisting}[language=Java
+	, caption=\leftline{}
+	, label=lst:java:main:orient
+	]
+@Override
+public void onSendData(String selectedItem) {
+	DetailFragment fragment = (DetailFragment) getSupportFragmentManager()
+			.findFragmentById(R.id.detailFragment);
+	if (fragment != null && fragment.isVisible())
+		fragment.setSelectedItem(selectedItem);
+	else {
+		Intent intent = new Intent(getApplicationContext()
+				, DetailActivity.class);
+		intent.putExtra(DetailActivity.SELECTED_ITEM, selectedItem);
+		startActivity(intent);
+	}
+}
 \end{lstlisting}
 
 \clearpage
 
 \section*{\LARGE{Вывод}}
 \addcontentsline{toc}{section}{Вывод}
-В этой практической работе были получены знания о содержимом файла
-манифеста и управления им. Такие как: установка версии и разрешений или
-запрет на изменение ориентации. Еще научились осуществлять переходы
-между Activity, передавать различные данные между ними, в том числе
-объектов.
+В этой практической работе были получены знания об создании и
+упарвлении фрагментами. А также научились организовавыть взаимодействие
+между ними.\par
+Также с помощью фрагментов создали приложение, которое можно использовать
+в вертикальном и горизонтальном положениях телефона.
 
