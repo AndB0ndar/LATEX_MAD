@@ -18,24 +18,27 @@
 \sloppy
 
 
-
-\usepackage[tableposition=top]{caption}
-\DeclareCaptionLabelFormat{gostfigure}{Рисунок #2}
-\DeclareCaptionLabelFormat{gosttable}{Таблица #2}
-\DeclareCaptionLabelSeparator{gost}{~---~}
-\captionsetup{labelsep=gost}
-\captionsetup[figure]{labelformat=gostfigure}
-\captionsetup[table]{labelformat=gosttable}
-\renewcommand{\thesubfigure}{\asbuk{subfigure}}
+\usepackage[labelsep=period]{caption}
+%\usepackage[tableposition=top]{caption}
+%\DeclareCaptionLabelFormat{gostfigure}{Рисунок #2}
+%\DeclareCaptionLabelFormat{gosttable}{Таблица #2}
+%\DeclareCaptionLabelSeparator{gost}{~---~}
+%\captionsetup{labelsep=gost}
+%\captionsetup[figure]{labelformat=gostfigure}
+%\captionsetup[table]{labelformat=gosttable}
+%\renewcommand{\thesubfigure}{\asbuk{subfigure}}
 
 
 % Customize chapters and sections
 
 \usepackage{titlesec}
 
-\titleformat{\chapter}[display]
+\titleformat
+	{\chapter}
+	[hang]
     {\filcenter}
-    {\MakeUppercase{\chaptertitlename} \thechapter}
+    {\bfseries\thechapter}
+    %{\bfseries\MakeUppercase{\chaptertitlename} \thechapter}
     {8pt}
     {\bfseries}{}
  
@@ -78,14 +81,14 @@
 }
 
 \usepackage{enumitem}
-\makeatletter
-    \AddEnumerateCounter{\asbuk}{\@asbuk}{м)}
-\makeatother
+%\makeatletter
+    %\AddEnumerateCounter{\asbuk}{\@asbuk}{м)}
+%\makeatother
 \setlist{nolistsep}
 %\setlist{nosep}
 \setlist[enumerate]{label*=\arabic*.}
 \setlist[description]{style=nextline}
-\renewcommand{\labelitemi}{-}
+%\renewcommand{\labelitemi}{-}
 %\renewcommand{\labelenumi}{\asbuk{enumi})}
 %\renewcommand{\labelenumii}{\arabic{enumii})}
 
@@ -103,10 +106,10 @@
 \providecommand{\No}{\textnumero}
 
 
-\usepackage[square,numbers,sort&compress]{natbib}
-\renewcommand{\bibnumfmt}[1]{#1.\hfill}
-\renewcommand{\bibsection}{\chapter*{СПИСОК ЛИТЕРАТУРЫ}}
-\setlength{\bibsep}{0pt}
+%\usepackage[square,numbers,sort&compress]{natbib}
+%\renewcommand{\bibnumfmt}[1]{#1.\hfill}
+%\renewcommand{\bibsection}{\chapter*{СПИСОК ЛИТЕРАТУРЫ}}
+%\setlength{\bibsep}{0pt}
 
 
 \newenvironment{image}{
@@ -114,5 +117,8 @@
 	\centering
 }{
 	\end{figure}
+}
+\newcommand{\includegrph}[1]{
+	\includegraphics[width=0.7\textwidth]{#1}
 }
 
