@@ -1,0 +1,1074 @@
+\graphicspath{{./fourteenth/img}}
+
+\section*{\LARGE{Введение}}
+\addcontentsline{toc}{section}{Введение}
+
+\textbf{Задание}:
+\begin{itemize}
+	\item Реализовать небольшой проект работы с контактами. Добавление
+		контактов.
+	\item Реализовать создание провайдера контента, чтобы другие
+		приложения могли обращаться к данным нашего приложения через
+		некоторый API. Определение контракта через класс FriendsContract.
+	\item Реализовать получение данных в провайдере используя метод
+		query().
+	\item Реализовать добавление данных, применяя метод insert()
+	\item Реализовать удаление данных, применяя метод delete()
+	\item Реализовать обновление данных, применяя метод update()
+	\item Для работы провайдера контента, реализовать внесение
+		соответствующих изменений в файл AndroidManifest.xml
+	\item Реализовать применение провайдера контента. Получение данных.
+		Добавление данных. Обновление данных. Удаление данных.
+	\item Реализовать асинхронную загрузку данных
+	\item Реализовать пример работы с json.
+	\item Реализовать пример работы с XML
+\end{itemize}
+
+\clearpage
+
+\section*{\LARGE{Выполнение практической работы}}
+\addcontentsline{toc}{section}{Выполнение практической работы}
+Наше приложение может сохранять разнообразную информацию о
+пользователе, какие-то связанные данные в файлах или настройках. Однако
+ОС Android уже хранит ряд важной информации, связанной с пользователем,
+к которой имеем доступ и которую мы можем использовать. Это и списки
+контактов, и файлы сохраненных изображений и видеоматериалов, и какието отметки о звонках и т.д., то есть некоторый контент. А для доступа к
+этому контенту в OC Android определены провайдеры контента (content
+provider).\par
+В Android имеются следующие встроенные провайдеры, определенные в
+пакете android.content:
+
+\begin{itemize}
+	\item AlarmClock: управление будильником;
+	\item Browser: история браузера и закладки;
+	\item CalendarContract: каледарь и информаци о событиях;
+	\item CallLog: информация о звонках;
+	\item ContactsContract: контакты;
+	\item MediaStore: медиа-файлы;
+	\item SearchRecentSuggestions: подсказки по поиску;
+	\item Settings: системные настройки;
+	\item UserDictionary: словарь слов, которые используются
+		для быстрого набора;
+	\item VoicemailContract: записи голосовой почты.
+\end{itemize}
+
+\section{Работа с контактами}
+Контакты в Android обладают встроенным API, который позволяет получать
+и изменять список контактов. Все контакты хранятся в базе данных SQLite,
+однако они не представляют единой таблицы. Для контактов отведено три
+таблицы, связанных отношением один-ко-многим: таблица для хранения
+информации о людях, таблица их телефонов и и таблица адресов их
+электронных почт. Но благодаря Android API мы можем абстрагироваться от
+связей между таблицами.\par
+Продолжим работу с проектом из прошлой темы и добавим в него
+возможность добавления новых контактов. Добавление контактов
+представляет собой запрос на изменение списка контактов, то есть его
+запись. Поэтому нам надо установить соответствующее разрешение в файле
+манифеста. Возьмем проект из прошлого материала и добавим в него в файл
+AndroidManifest.xml разрешение android.permission.WRITE\_CONTACTS:
+Итак, для доступа к контактам нам надо установить разрешение
+\texttt{android.permission.READ\_CONTACTS} в файле манифеста приложения.\par
+Для вывода списка контактов в файле разметки определим
+следующую разметку интерфейса:
+
+\begin{lstlisting}[language=XML
+	, label=lst:
+	]
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <EditText
+        android:id="@+id/newContact"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@id/header"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/addBtn"
+        app:layout_constraintTop_toTopOf="parent" />
+    <Button
+        android:id="@+id/addBtn"
+        android:text="Add"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="onAddContact"
+        app:layout_constraintBottom_toTopOf="@id/header"
+        app:layout_constraintLeft_toRightOf="@id/newContact"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+    <TextView
+        android:id="@+id/header"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Контакты"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@id/contactList"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/newContact" />
+    <ListView
+        android:id="@+id/contactList"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/header" />
+</androidx.constraintlayout.widget.ConstraintLayout>
+\end{lstlisting}
+
+Для вывода списка контактов воспользуемся элементом ListView. И в классе
+MainActivity получим контакты:
+
+\begin{lstlisting}[language=Java
+	, label=lst:
+	]
+	private static final int REQUEST_CODE_READ_CONTACTS = 1;
+	private static boolean READ_CONTACTS_GRANTED = false;
+	ArrayList<String> contacts = new ArrayList<>();
+	Button addBtn;
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_contact);
+		addBtn = findViewById(R.id.addBtn);
+		// получаем разрешения
+		int hasReadContactPermission = ContextCompat.checkSelfPermission(this,
+				android.Manifest.permission.READ_CONTACTS);
+		// если устройство до API 23, устанавливаем разрешение
+		if (hasReadContactPermission ==
+				PackageManager.PERMISSION_GRANTED) {
+			READ_CONTACTS_GRANTED = true;
+		} else {
+			// вызываем диалоговое окно для установки разрешений
+			ActivityCompat.requestPermissions(this, new
+							String[]{android.Manifest.permission.READ_CONTACTS,
+							android.Manifest.permission.WRITE_CONTACTS},
+					REQUEST_CODE_READ_CONTACTS);
+		}
+		// если разрешение установлено, загружаем контакты
+		if (READ_CONTACTS_GRANTED) {
+			loadContacts();
+		}
+		addBtn.setEnabled(READ_CONTACTS_GRANTED);
+	}
+
+	@Override
+	public void onRequestPermissionsResult(int requestCode, @NonNull String[]
+			permissions, @NonNull int[] grantResults) {
+		super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+		if (requestCode == REQUEST_CODE_READ_CONTACTS) {
+			if (grantResults.length > 0 && grantResults[0] ==
+					PackageManager.PERMISSION_GRANTED) {
+				READ_CONTACTS_GRANTED = true;
+			}
+			addBtn.setEnabled(READ_CONTACTS_GRANTED);
+		}
+		if (READ_CONTACTS_GRANTED) {
+			loadContacts();
+		} else {
+			Toast.makeText(this, "Требуется установить разрешения",
+					Toast.LENGTH_LONG).show();
+		}
+	}
+
+	public void onAddContact(View v) {
+		ContentValues contactValues = new ContentValues();
+		EditText contactText = findViewById(R.id.newContact);
+		String newContact = contactText.getText().toString();
+		contactText.setText("");
+		contactValues.put(ContactsContract.RawContacts.ACCOUNT_NAME, newContact);
+		contactValues.put(ContactsContract.RawContacts.ACCOUNT_TYPE, newContact);
+		Uri newUri = getContentResolver().insert(ContactsContract.RawContacts.CONTENT_URI, contactValues);
+		long rawContactsId = ContentUris.parseId(newUri);
+		contactValues.clear();
+		contactValues.put(ContactsContract.Data.RAW_CONTACT_ID
+				,	rawContactsId);
+		contactValues.put(ContactsContract.Data.MIMETYPE
+				, ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE);
+
+		contactValues.put(ContactsContract.CommonDataKinds.StructuredName.DISPLAY_NAME, newContact);
+		getContentResolver().insert(ContactsContract.Data.CONTENT_URI, contactValues);
+		Toast.makeText(getApplicationContext(), newContact + " добавлен в список контактов", Toast.LENGTH_LONG).show();
+		loadContacts();
+	}
+
+	private void loadContacts() {
+		contacts.clear();
+		ContentResolver contentResolver = getContentResolver();
+		Cursor cursor =
+				contentResolver.query(ContactsContract.Contacts.CONTENT_URI, null, null,
+						null, null);
+		if (cursor != null) {
+			while (cursor.moveToNext()) {
+				// получаем каждый контакт
+				int id = cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME_PRIMARY);
+				String contact = cursor.getString(id);
+				// добавляем контакт в список
+				contacts.add(contact);
+			}
+			cursor.close();
+		}
+		// создаем адаптер
+		ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
+				android.R.layout.simple_list_item_1, contacts);
+		// устанавливаем для списка адаптер
+		ListView contactList = findViewById(R.id.contactList);
+		contactList.setAdapter(adapter);
+	}
+\end{lstlisting}
+
+\section{Создание провайдера контента}
+\subsection{Определение контракта}
+Контент-провайдеры (content providers) позволяют обращаться одним
+приложениям к данным других приложений. И мы таже можем сделать,
+чтобы другие приложения могули обращаться к данным нашего приложения
+через некоторый API. Для этого нам надо создать свой контент-провайдер.\par
+Вначале добавим в проект класс FriendsContract, который будет описывать
+основные значения, столбцы, адреса uri, используемые в контент-провайдере:
+
+\begin{lstlisting}[language=Java
+	, label=lst:
+	]
+import android.content.ContentUris;
+import android.net.Uri;
+
+public class FriendsContract {
+	static final String TABLE_NAME = "friends";
+	static final String CONTENT_AUTHORITY = "com.example.fourteenth";
+	static final Uri CONTENT_AUTHORITY_URI = Uri.parse("content://" +
+			CONTENT_AUTHORITY);
+	static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd." +
+			CONTENT_AUTHORITY + "." + TABLE_NAME;
+	static final String CONTENT_ITEM_TYPE= "vnd.android.cursor.item/vnd." +
+			CONTENT_AUTHORITY + "." + TABLE_NAME;
+
+	public static class Columns{
+		public static final String _ID = "_id";
+		public static final String NAME = "Name";
+		public static final String EMAIL = "Email";
+		public static final String PHONE = "Phone";
+		private Columns(){
+		}
+	}
+	static final Uri CONTENT_URI =
+			Uri.withAppendedPath(CONTENT_AUTHORITY_URI, TABLE_NAME);
+	// создает uri с помощью id
+	static Uri buildFriendUri(long taskId){
+		return ContentUris.withAppendedId(CONTENT_URI, taskId);
+	}
+	// получает id из uri
+	static long getFriendId(Uri uri){
+		return ContentUris.parseId(uri);
+	}
+}
+\end{lstlisting}
+
+Далее добавим в проект новый класс AppDatabase:
+
+\begin{lstlisting}[language=Java
+	, label=lst:
+	]
+package com.example.fourteenth;
+
+import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+
+public class AppDatabase extends SQLiteOpenHelper {
+	public static final String DATABASE_NAME = "friends.db";
+	public static final int DATABASE_VERSION = 1;
+	private static AppDatabase instance = null;
+
+	private AppDatabase(Context context){
+		super(context, DATABASE_NAME, null, DATABASE_VERSION);
+	}
+
+	static AppDatabase getInstance(Context context){
+		if(instance == null){
+			instance = new AppDatabase(context);
+		}
+		return instance;
+	}
+
+	@Override
+	public void onCreate(SQLiteDatabase db) {
+		String sql = "CREATE TABLE " + FriendsContract.TABLE_NAME + "(" +
+				FriendsContract.Columns._ID + " INTEGER PRIMARY KEY NOT NULL, " +
+		FriendsContract.Columns.NAME + " TEXT NOT NULL, " +
+				FriendsContract.Columns.EMAIL + " TEXT, " +
+				FriendsContract.Columns.PHONE + " TEXT NOT NULL)";
+		db.execSQL(sql);
+		// добавление начальных данных
+		db.execSQL("INSERT INTO "+ FriendsContract.TABLE_NAME +" (" +
+				FriendsContract.Columns.NAME
+				+ ", " + FriendsContract.Columns.PHONE + ") VALUES ('Tom', '+12345678990');");
+		db.execSQL("INSERT INTO "+ FriendsContract.TABLE_NAME +" (" +
+				FriendsContract.Columns.NAME
+				+ ", " + FriendsContract.Columns.EMAIL + ", " +
+				FriendsContract.Columns.PHONE +
+				" ) VALUES ('Bob', 'bob@gmail.com', '+13456789102');");
+	}
+	@Override
+	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+	}
+}
+\end{lstlisting}
+
+Данный класс по принципу синглтона организует доступ к базе данных и,
+кроме того, создает саму базу данных и добавляет в нее начальные данные.
+
+\subsection{Создание провайдера}
+Продолжим рабоу с проектом из прошлого материала и добавим в него класс
+AppProvider, который, собственно, и будет представлять провайдер
+контента:
+
+\begin{lstlisting}[language=Java
+	, label=lst:
+	]
+package com.example.fourteenth;
+
+import android.content.ContentProvider;
+import android.content.ContentValues;
+import android.content.UriMatcher;
+import android.database.Cursor;
+import android.database.SQLException;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteQueryBuilder;
+import android.net.Uri;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
+public class AppProvider extends ContentProvider {
+	private AppDatabase mOpenHelper;
+	private static final UriMatcher sUriMatcher = buildUriMatcher();
+	public static final int FRIENDS = 100;
+	public static final int FRIENDS_ID = 101;
+	private static UriMatcher buildUriMatcher(){
+		final UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
+		// content://com.example.friendsprovider/FRIENDS
+		matcher.addURI(FriendsContract.CONTENT_AUTHORITY,
+				FriendsContract.TABLE_NAME, FRIENDS);
+		// content://com.example.friendsprovider/FRIENDS/8
+		matcher.addURI(FriendsContract.CONTENT_AUTHORITY,
+				FriendsContract.TABLE_NAME + "/#", FRIENDS_ID);
+		return matcher;
+	}
+	@Override
+	public boolean onCreate() {
+		mOpenHelper = AppDatabase.getInstance(getContext());
+		return true;
+	}
+	@Nullable
+	@Override
+	public Cursor query(@NonNull Uri uri, @Nullable String[] projection,
+						@Nullable String selection, @Nullable String[] selectionArgs, @Nullable String
+								sortOrder) {
+		final int match = sUriMatcher.match(uri);
+		SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
+		switch(match){
+			case FRIENDS:
+				queryBuilder.setTables(FriendsContract.TABLE_NAME);
+				break;
+			case FRIENDS_ID:
+				queryBuilder.setTables(FriendsContract.TABLE_NAME);
+				long taskId = FriendsContract.getFriendId(uri);
+				queryBuilder.appendWhere(FriendsContract.Columns._ID + " = " +
+						taskId);
+				break;
+			default:
+				throw new IllegalArgumentException("Unknown URI: "+ uri);
+		}
+		SQLiteDatabase db = mOpenHelper.getReadableDatabase();
+		return queryBuilder.query(db, projection, selection, selectionArgs, null, null,
+				sortOrder);
+	}
+	@Nullable
+	@Override
+	public String getType(@NonNull Uri uri) {
+		final int match = sUriMatcher.match(uri);
+		switch(match){
+			case FRIENDS:
+				return FriendsContract.CONTENT_TYPE;
+			case FRIENDS_ID:
+				return FriendsContract.CONTENT_ITEM_TYPE;
+			default:
+				throw new IllegalArgumentException("Unknown URI: "+ uri);
+		}
+	}
+	@Nullable
+	@Override
+	public Uri insert(@NonNull Uri uri, @Nullable ContentValues values) {
+		final int match = sUriMatcher.match(uri);
+		final SQLiteDatabase db;
+		Uri returnUri;
+		long recordId;
+		if (match == FRIENDS) {
+			db = mOpenHelper.getWritableDatabase();
+			recordId = db.insert(FriendsContract.TABLE_NAME, null, values);
+			if (recordId > 0) {
+				returnUri = FriendsContract.buildFriendUri(recordId);
+			} else {
+				throw new SQLException("Failed to insert: " + uri.toString());
+			}
+		} else {
+			throw new IllegalArgumentException("Unknown URI: " + uri);
+		}
+		return returnUri;
+	}
+	
+	@Override
+	public int delete(@NonNull Uri uri, @Nullable String selection, @Nullable
+			String[] selectionArgs) {
+		final int match = sUriMatcher.match(uri);
+		final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
+		String selectionCriteria = selection;
+		if (match != FRIENDS && match != FRIENDS_ID)
+			throw new IllegalArgumentException("Unknown URI: "+ uri);
+		if (match==FRIENDS_ID) {
+			long taskId = FriendsContract.getFriendId(uri);
+			selectionCriteria = FriendsContract.Columns._ID + " = " + taskId;
+			if ((selection != null) && (selection.length() > 0)) {
+				selectionCriteria += " AND (" + selection + ")";
+			}
+		}
+		return db.delete(FriendsContract.TABLE_NAME, selectionCriteria,
+				selectionArgs);
+	}
+	@Override
+	public int update(@NonNull Uri uri, @Nullable ContentValues values,
+					  @Nullable String selection, @Nullable String[] selectionArgs) {
+		final int match = sUriMatcher.match(uri);
+		final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
+		String selectionCriteria = selection;
+		if(match != FRIENDS && match != FRIENDS_ID)
+			throw new IllegalArgumentException("Unknown URI: "+ uri);
+		if(match==FRIENDS_ID) {
+			long taskId = FriendsContract.getFriendId(uri);
+			selectionCriteria = FriendsContract.Columns._ID + " = " + taskId;
+			if ((selection != null) && (selection.length() > 0)) {
+				selectionCriteria += " AND (" + selection + ")";
+			}
+		}
+		return db.update(FriendsContract.TABLE_NAME, values, selectionCriteria,
+				selectionArgs);
+	}
+}
+\end{lstlisting}
+
+Класс провайдера контента должен наследоваться от абстрактного класса
+ContentProvider, который определяет ряд методов для работы с данными, в
+частности, методы oncreate, query, insert, update, delete, getType.\par
+Но чтобы провайдер контента заработал, необходимо внести изменения в
+файл AndroidManifest.xml.
+В конец элемента <application> добавим определение провайдера:
+
+\begin{lstlisting}[language=XML
+	, label=lst:
+	]
+<provider
+	android:name=".AppProvider"
+	android:authorities="com.example.fourteenth"
+	android:exported="false" />
+\end{lstlisting}
+
+В элементе provider атрибут android:authorities указывает на название
+провайдера - в данном случае это название, которое определено в прошлой
+теме в константе CONTENT\_AUTHORITY в классе FriendsContract.
+
+\subsection{Применение}
+В прошлом материале был определен провайдер контента. Рассмотрим, как
+его использовать. Сначала определим простейший визуальный интерфейс
+для тестирования возможностей провайдера в файле разметки:
+
+\begin{lstlisting}[language=XML
+	, label=lst:
+	]
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".ContentProviderActivity">
+    <Button
+        android:id="@+id/getButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Get"
+        android:onClick="getAll"
+        app:layout_constraintBottom_toTopOf="@id/addButton"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+    <Button
+        android:id="@+id/addButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Add"
+        android:onClick="add"
+        app:layout_constraintBottom_toTopOf="@id/updateButton"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/getButton" />
+    <Button
+        android:id="@+id/updateButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Update"
+        android:onClick="update"
+        app:layout_constraintBottom_toTopOf="@id/deleteButton"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/addButton" />
+    <Button
+        android:id="@+id/deleteButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Delete"
+        android:onClick="delete"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/updateButton" />
+</androidx.constraintlayout.widget.ConstraintLayout>
+\end{lstlisting}
+
+Здесь определен набор кнопок для вывода списка друзей, а также
+добавления, обновления и удаления. Каждая кнопка будет вызывать
+соответсствующий метод в классе.\par
+Теперь изменим код класса. Для упрощения результаты будем
+выводить в окне Logcat с помощью метода Log.d():
+
+\begin{lstlisting}[language=Java
+	, label=lst:
+	]
+private static final String TAG = "MainActivity";
+
+@Override
+protected void onCreate(Bundle savedInstanceState) {
+	super.onCreate(savedInstanceState);
+	setContentView(R.layout.activity_content_provider);
+}
+// получение всех
+public void getAll(View view){
+	String[] projection = {
+			FriendsContract.Columns._ID,
+			FriendsContract.Columns.NAME,
+			FriendsContract.Columns.EMAIL,
+			FriendsContract.Columns.PHONE
+	};
+	ContentResolver contentResolver = getContentResolver();
+	Cursor cursor = contentResolver.query(FriendsContract.CONTENT_URI,
+			projection,
+			null,
+			null,
+			FriendsContract.Columns.NAME);
+	if(cursor != null){
+		Log.d(TAG, "count: " + cursor.getCount());
+		// перебор элементов
+		while(cursor.moveToNext()){
+			for(int i=0; i < cursor.getColumnCount(); i++){
+				Log.d(TAG, cursor.getColumnName(i) + " : " + cursor.getString(i));
+			}
+			Log.d(TAG, "=========================");
+		}
+		cursor.close();
+	}
+	else{
+		Log.d(TAG, "Cursor is null");
+	}
+}
+// Добавление
+public void add(View view){
+	ContentResolver contentResolver = getContentResolver();
+	ContentValues values = new ContentValues();
+	values.put(FriendsContract.Columns.NAME, "Sam");
+	values.put(FriendsContract.Columns.EMAIL, "sam@gmail.com");
+	values.put(FriendsContract.Columns.PHONE, "+13676254985");
+	Uri uri = contentResolver.insert(FriendsContract.CONTENT_URI, values);
+	Log.d(TAG, "Friend added");
+}
+// Обновление
+public void update(View view){
+	ContentResolver contentResolver = getContentResolver();
+	ContentValues values = new ContentValues();
+	values.put(FriendsContract.Columns.EMAIL, "sammy@gmail.com");
+	values.put(FriendsContract.Columns.PHONE, "+55555555555");
+	String selection = FriendsContract.Columns.NAME + " = 'Sam'";
+	int count = contentResolver.update(FriendsContract.CONTENT_URI, values,
+			selection, null);
+	Log.d(TAG, "Friend updated");
+}
+// Удаление
+public void delete(View view){
+	ContentResolver contentResolver = getContentResolver();
+	String selection = FriendsContract.Columns.NAME + " = ?";
+	String[] args = {"Sam"};
+	int count = contentResolver.delete(FriendsContract.CONTENT_URI,
+			selection, args);
+	Log.d(TAG, "Friend deleted");
+}
+\end{lstlisting}
+
+\subsection{Асинхронная загрузка данных}
+В базе данных может быть много данных, и их загрузка может занять
+некоторое время. В этом случае можно воспользоваться асинхронной
+загрузкой данных. Для этого класс activity или фрагмента должен
+реализовать интерфейс LoaderManager.LoaderCallbacks<Cursor>.\par
+Возьмем проект из прошлого материала, где реализован провайдер контента
+AppProvider, и изменим класс:
+
+\begin{lstlisting}[language=Java
+	, label=lst:
+	]
+
+public class AsyncContentProviderActivity extends AppCompatActivity implements
+		LoaderManager.LoaderCallbacks<Cursor> {
+
+	private static final String TAG = "MainActivity";
+	private static final int LOADER_ID = 225;
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+//		setContentView(R.layout.activity_async_content_provider);
+		// запускаем загрузку данных через провайдер контента
+		LoaderManager.getInstance(this).initLoader(LOADER_ID, null, this);
+	}
+
+	@NonNull
+	@Override
+	public Loader<Cursor> onCreateLoader(int id, @Nullable Bundle args) {
+		String[] projection = {
+				FriendsContract.Columns._ID,
+				FriendsContract.Columns.NAME,
+				FriendsContract.Columns.EMAIL,
+				FriendsContract.Columns.PHONE
+		};
+		if(id == LOADER_ID)
+			return new CursorLoader(this, FriendsContract.CONTENT_URI,
+					projection,
+					null,
+					null,
+					FriendsContract.Columns.NAME);
+		else
+			throw new InvalidParameterException("Invalid loader id");
+	}
+
+	@Override
+	public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor data) {
+		if(data != null){
+			Log.d(TAG, "count: " + data.getCount());
+			// перебор элементов
+			while(data.moveToNext()){
+				for(int i=0; i < data.getColumnCount(); i++){
+					Log.d(TAG, data.getColumnName(i) + " : " + data.getString(i));
+				}
+				Log.d(TAG, "=========================");
+			}
+			data.close();
+		}
+		else{
+			Log.d(TAG, "Cursor is null");
+		}
+	}
+
+	@Override
+	public void onLoaderReset(@NonNull Loader<Cursor> loader) {
+		Log.d(TAG, "onLoaderReset...");
+	}
+}
+\end{lstlisting}
+
+Интерфейс LoaderManager.LoaderCallbacks<Cursor> предполагает
+реализацию трех методов. Метод onCreateLoader() загружает курсор. В этот
+метод в качестве параметров передаются числовой код операции и объект
+Bundle. Числовой код передается при запуске загрузки курсора. В данном
+случае в качестве такого кода использует константа LOADER\_ID.\par
+Чтобы запустить загрузку данных, в методе onCreate вызывается метод
+LoaderManager.getInstance(this).initLoader(LOADER\_ID, null, this);.
+Первый параметр - числовой код, а второй - объект Bundle. Это те значения,
+которые мы можем получить в методе onCreateLoader. И третий - объект
+Context.
+
+\section{Работа с json}
+Для работы с форматом json нет встроенных средств, но есть куча библиотек
+и пакетов, которые можно использовать для данной цели. Одним из наиболее
+популярных из них является пакет com.google.code.gson.
+Для его использования в проекте Android в файл guild.gradle, который
+относится к модулю app, в секцию dependencies необходимо добавить
+соответствующую зависимость:
+
+\begin{verbatim}
+implementation 'com.google.code.gson:gson:2.8.8'
+\end{verbatim}
+
+После добавления пакета в проект добавим новый класс User, который будет
+представлять данные:
+
+\begin{lstlisting}[language=Java
+	, label=lst:
+	]
+public class User {
+
+	private String name;
+	private int age;
+
+	public User() {
+	}
+
+	User(String name, int age){
+		this.name = name;
+		this.age = age;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public int getAge() {
+		return age;
+	}
+	public void setAge(int age) {
+		this.age = age;
+	}
+	@Override
+	public String toString(){
+		return "Имя: " + name + " Возраст: " + age;
+	}
+}
+\end{lstlisting}
+
+Объекты этого класса мы будем сериализовать в формат json и наоборот
+десериализовать из файла.\par
+Для работы с json добавим следующий класс JSONHelper:
+
+\begin{lstlisting}[language=Java
+	, label=lst:
+	]
+class JSONHelper {
+	private static final String FILE_NAME = "data.json";
+	static boolean exportToJSON(Context context, List<User> dataList) {
+		Gson gson = new Gson();
+		DataItems dataItems = new DataItems();
+		dataItems.setUsers(dataList);
+		String jsonString = gson.toJson(dataItems);
+		try(FileOutputStream fileOutputStream =
+					context.openFileOutput(FILE_NAME, Context.MODE_PRIVATE)) {
+			fileOutputStream.write(jsonString.getBytes());
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+	static List<User> importFromJSON(Context context) {
+		try(FileInputStream fileInputStream = context.openFileInput(FILE_NAME);
+			InputStreamReader streamReader = new
+					InputStreamReader(fileInputStream)){
+			Gson gson = new Gson();
+			DataItems dataItems = gson.fromJson(streamReader, DataItems.class);
+			return dataItems.getUsers();
+		}
+		catch (IOException ex){
+			ex.printStackTrace();
+		}
+		return null;
+	}
+	private static class DataItems {
+		private List<User> users;
+		List<User> getUsers() {
+			return users;
+		}
+		void setUsers(List<User> users) {
+			this.users = users;
+		}
+	}
+}
+\end{lstlisting}
+
+Для работы с json создается объект Gson. Для сериализации данных в формат
+json у этого объекта вызывается метод toJson(), в который передаются
+сериализуемые данные.\par
+Для упрощения работы с данными применяется вспомогательный класс
+DataItems. На выходе метод toJson() возвращает строку, которая затем
+сохраняется в текстовый файл.\par
+Для десериализации выполняется метод fromJson(), в который передается
+объект Reader с сериализованными данными и тип, к которому надо
+десериализиовать данные.\par
+Теперь определим основной функционал для взаимодействия с
+пользователем. Изменим файл разметки следующим образом:
+
+\begin{lstlisting}[language=XML
+	, label=lst:
+	]
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <EditText
+        android:id="@+id/nameText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Введите имя"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/ageText"
+        app:layout_constraintTop_toTopOf="parent" />
+    <EditText
+        android:id="@+id/ageText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Введите возраст"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/addButton"
+        app:layout_constraintTop_toBottomOf="@id/nameText" />
+    <Button
+        android:id="@+id/addButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Добавить"
+        android:onClick="addUser"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/saveButton"
+        app:layout_constraintTop_toBottomOf="@id/ageText" />
+    <Button
+        android:id="@+id/saveButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Сохранить"
+        android:onClick="save"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/openButton"
+        app:layout_constraintBottom_toTopOf="@id/list"
+        app:layout_constraintTop_toBottomOf="@id/addButton"/>
+    <Button
+        android:id="@+id/openButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Открыть"
+        android:onClick="open"
+        app:layout_constraintLeft_toRightOf="@id/saveButton"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/list"
+        app:layout_constraintTop_toBottomOf="@id/addButton"/>
+    <ListView
+        android:id="@+id/list"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/openButton" />
+</androidx.constraintlayout.widget.ConstraintLayout>
+\end{lstlisting}
+
+Здесь определены два текстовых поля для ввода названия модели и цены
+объекта User и одна кнопка для добавления данных в список. Еще одна
+кнопка выполняет сериализацию данных из списка в файл, а третья кнопка -
+восстановление данных из файла.\par
+Для вывода сами данных определен элемент ListView.\par
+И изменим класс:
+
+\begin{lstlisting}[language=Java
+	, label=lst:
+	]
+private ArrayAdapter<User> adapter;
+private EditText nameText, ageText;
+private List<User> users;
+ListView listView;
+
+@Override
+protected void onCreate(Bundle savedInstanceState) {
+	super.onCreate(savedInstanceState);
+	setContentView(R.layout.activity_json);
+	nameText = findViewById(R.id.nameText);
+	ageText = findViewById(R.id.ageText);
+	listView = findViewById(R.id.list);
+	users = new ArrayList<>();
+	adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1,
+			users);
+	listView.setAdapter(adapter);
+}
+public void addUser(View view){
+	String name = nameText.getText().toString();
+	int age = Integer.parseInt(ageText.getText().toString());
+	User user = new User(name, age);
+	users.add(user);
+	adapter.notifyDataSetChanged();
+}
+public void save(View view){
+	boolean result = JSONHelper.exportToJSON(this, users);
+	if(result){
+		Toast.makeText(this, "Данные сохранены",
+				Toast.LENGTH_LONG).show();
+	}
+	else{
+		Toast.makeText(this, "Не удалось сохранить данные",
+				Toast.LENGTH_LONG).show();
+	}
+}
+public void open(View view){
+	users = JSONHelper.importFromJSON(this);
+	if(users!=null){
+		adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1,
+				users);
+		listView.setAdapter(adapter);
+		Toast.makeText(this, "Данные восстановлены",
+				Toast.LENGTH_LONG).show();
+	}
+	else{
+		Toast.makeText(this, "Не удалось открыть данные",
+				Toast.LENGTH_LONG).show();
+	}
+}
+\end{lstlisting}
+
+Все данные находятся в списке users, который представляет объект
+List<User>. Через адаптер этот список связывается с ListView.\par
+Для сохранения и восстановления данных вызываются ранее определенные
+методы в классе JSONHelper. Кнопка добавления добавляет данные в список
+user, и они сразу же отображаются в ListView. При нажатии на кнопку
+сохранения данные из списка users сохраняются в локальный файл. Затем с
+помощью кнопки открытия мы сможем открыть ранее сохраненный файл.
+
+\section{Работа с XML}
+Одним из распространенных форматов хранения и передачи данных
+является xml. Рассмотрим, как с ним работать в приложении на Android.\par
+Приложение может получать данные в формате xml различными способами ---
+из ресурсов, из сети и т.д. В данном случае рассмотрим ситуацию, когда файл
+xml хранится в ресурсах.\par
+Возьмем стандартный проект Android по умолчанию и в папке res создадим
+каталог xml.\par
+В этот каталог добавим новый файл, который назовем users.xml и который
+будет иметь следующее содержимое:
+
+\begin{lstlisting}[language=XML
+	, label=lst:
+	]
+<?xml version="1.0" encoding="utf-8"?>
+<users>
+    <user>
+        <name>Tom</name>
+        <age>36</age>
+    </user>
+    <user>
+        <name>Alice</name>
+        <age>32</age>
+    </user>
+    <user>
+        <name>Bob</name>
+        <age>28</age>
+    </user>
+</users>
+\end{lstlisting}
+
+Это обычный файл xml, который хранит набор элементов user. Каждый
+элемент характеризуется наличием двух под элементов - name и age. Условно
+говоря, каждый элемент описывает пользователя, у которого есть имя и
+возраст.\par
+И в ту же папку добавим новый класс UserResourceParser.
+Определим для класса UserResourceParser следующий код:
+
+\begin{lstlisting}[language=Java
+	, label=lst:
+	]
+private ArrayList<User> users;
+
+public UserResourceParser(){
+	users = new ArrayList<>();
+}
+
+public ArrayList<User> getUsers(){
+	return users;
+}
+
+public boolean parse(XmlPullParser xpp){
+	boolean status = true;
+	User currentUser = null;
+	boolean inEntry = false;
+	String textValue = "";
+	try{
+		int eventType = xpp.getEventType();
+		while(eventType != XmlPullParser.END_DOCUMENT){
+			String tagName = xpp.getName();
+			switch (eventType){
+				case XmlPullParser.START_TAG:
+					if("user".equalsIgnoreCase(tagName)){
+						inEntry = true;
+						currentUser = new User();
+					}
+					break;
+				case XmlPullParser.TEXT:
+					textValue = xpp.getText();
+					break;
+				case XmlPullParser.END_TAG:
+					if(inEntry){
+						if("user".equalsIgnoreCase(tagName)){
+							users.add(currentUser);
+							inEntry = false;
+						} else if("name".equalsIgnoreCase(tagName)){
+							currentUser.setName(textValue);
+						} else if("age".equalsIgnoreCase(tagName)){
+							currentUser.setAge(Integer.parseInt(textValue));
+						}
+					}
+					break;
+				default:
+			}
+			eventType = xpp.next();
+		}
+	}
+	catch (Exception e){
+		status = false;
+		e.printStackTrace();
+	}
+	return status;
+}
+\end{lstlisting}
+
+Данный класс выполняет функции парсинга xml. Распарсенные данные будут
+храниться в переменной users. Непосредственно сам парсинг осуществляется
+с помощью функции parse. Основную работу выполняет передаваемый в
+качестве параметра объект XmlPullParser. Этот класс позволяет пробежаться
+по всему документу xml и получить его содержимое.\par
+Теперь изменим класс, который будет загружать ресурс xml:
+
+\begin{lstlisting}[language=Java
+	, label=lst:
+	]
+@Override
+protected void onCreate(Bundle savedInstanceState) {
+	super.onCreate(savedInstanceState);
+	setContentView(R.layout.activity_xmlactivity);
+
+	XmlPullParser xpp = getResources().getXml(R.xml.users);
+	UserResourceParser parser = new UserResourceParser();
+	if(parser.parse(xpp)) {
+		for(User prod: parser.getUsers()){
+			Log.d("XML", prod.toString());
+		}
+	}
+}
+\end{lstlisting}
+
+\clearpage
+
+\section*{\LARGE{Вывод}}
+\addcontentsline{toc}{section}{Вывод}
+В данной практической работе были получены знания о работе с контактами.
+Также научились создавать провайдеры контента. В том чилсе:
+определять контракт, создавать провайдер и применять их. Еще познакомились
+с асинхронной загрузкой данных.\par
+В дополнение к этому освоили работу с json и xml.
+
+
